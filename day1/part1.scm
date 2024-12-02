@@ -41,13 +41,15 @@
 (define list-b (qsort (listB (num-pairs))))
 
 
-
+;; part 1
 (define (get-sum)
     (define (sum-iter la lb acc)
       (if (null? la) acc
           (sum-iter (cdr la) (cdr lb) (+ acc (abs (- (car la) (car lb)))))))
     (sum-iter list-a list-b 0))
 
+
+;; helper functions, exist in standard library
 (define (occurences symbol list)
   (define (occurences-inner l acc)
     (cond
@@ -61,6 +63,7 @@
       (fn (car list)
           (reduce fn (cdr list) init))))
 
+;; part 2
 (define (get-similarity)
     (reduce (lambda (x s) (+ s (* x (occurences x list-b)))) list-a 0))
         
