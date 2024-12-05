@@ -8,8 +8,8 @@
       (list-ec (:port line p read-line) line))))
 
 
-
 (define teststring "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")
+
 (define input (file->lines "input"))
 
 (define (find-matches-in-string string)
@@ -59,9 +59,6 @@
 
     (define (mulstr->number str)
       
-      (display "\n mulstr->number called with ")
-      (display str)
-      (display "\n")
       
       (let ((nums (map string->number (string-split (string-trim str "mul(") #rx"[,\\)]"))))
         (* (car nums)(cadr nums))))
@@ -69,7 +66,6 @@
 
     
     (define (check-entry item)
-      (display item)
       (cond
         ((equal? item "do") (begin (set! do #t) 0))
         ((equal? item "don't") (begin (display "\nsetting do #f\n") (set! do #f) 0))
