@@ -1,6 +1,7 @@
 #lang racket
 (require srfi/42) ; Racket
 
+
 (define (file->lines filename)
   (call-with-input-file filename
     (lambda (p)
@@ -10,31 +11,16 @@
 (define (string->report string)
   (map (lambda (x) (string->number x)) (string-split string)))
 
-(define (is-ascending? report)
+
+
+(define (succesive-pred pred report)
   (if (null? (cdr report))
       #t
-      (and (< (car report) (cadr report)) (is-ascending? (cdr report)))))
+      (and (pred (car report) (cadr report)) (succesive-pred pred (cdr report)))))
 
-(define (is-descending? report)
-    (if (null? (cdr report))
-      #t
-      (and (> (car report) (cadr report)) (is-descending? (cdr report)))))
-
-
-(define (is-within-range report)
-  (define (differences l)
-    (if (null? (cdr l))
-        '()
-        (cons (abs (- (cadr l) (car l))) (differences (cdr l)))))
-  
-  (define (check-levels l)
-    (if (null? l) #t
-     (and (and (> 4 (car l)) (< 0 (car l))) (check-levels (cdr l)))))
-
-  (check-levels (differences report)))
 
 (define (check-report report)
-  (and (or (is-ascending? report) (is-descending? report)) (is-within-range report)))
+  (and (or (succesive-pred < report) (succesive-pred > report)) (succesive-pred (lambda (x y) (and (< (abs (- y x)) 4) (> (abs (- y x)) 0))) report)))
 
 (define (check-all reports acc)
   (cond
@@ -42,3 +28,42 @@
     ((check-report (car reports)) (check-all (cdr reports) (+ 1 acc)))
     (else (check-all (cdr reports) acc))))
 
+
+(check-all (map string->report (file->lines "input")) 0)
+
+
+;;;;;;;;;;;;; part2
+
+(define (succesive-pred-p2 pred report strike)
+  (cond
+    ((null? (cdr report)) #t)
+    ((pred (car report) (cadr report)) (succesive-pred-p2 pred (cdr report) strike))
+    ((not (eq? strike #f)) strike) ;; we have a strike, and failed again
+    (else (succesive-pred-p2 pred (cdr report) (car report)))))
+
+
+(define (delete-1st x lst)
+  (cond ((null? lst) '())
+        ((equal? (car lst) x) (cdr lst))
+        (else (cons (car lst)
+                    (delete-1st x (cdr lst))))))
+
+(define (check-report-p2 report)
+  (let ((incs  (succesive-pred-p2 (lambda (x y) (and (< (abs (- y x)) 4) (> (abs (- y x)) 0))) report #f)))
+    (display "incs: ")
+    (display incs)
+    (display "\n")
+    (cond
+      ((eq? incs #f) #f)
+      ((eq? incs #t) (or (succesive-pred-p2 < report #f) (succesive-pred-p2 > report #f)))
+      (else (or (succesive-pred < (delete-1st incs report)) (succesive-pred > (delete-1st incs report)))))))
+    
+  ;;(and (or (succesive-pred-p2 < report #f) (succesive-pred-p2 > report #f)) (succesive-pred-p2 (lambda (x y) (and (< (abs (- y x)) 4) (> (abs (- y x)) 0))) report #f)))
+(define (check-all-p2 reports acc)
+  (cond
+    ((null? reports) acc)
+    ((check-report-p2 (car reports)) (check-all-p2 (cdr reports) (+ 1 acc)))
+    (else (check-all-p2 (cdr reports) acc))))
+
+
+(check-all-p2 (map string->report (file->lines "test")) 0)
