@@ -1,0 +1,12 @@
+#lang racket
+(require srfi/42) ; Racket
+
+
+(define (file->lines filename)
+  (call-with-input-file filename
+    (lambda (p)
+      (list-ec (:port line p read-line) line))))
+
+
+(define input
+  (map (lambda (x)(string-split (regexp-replace #rx":" x ""))) (file->lines "input")))
