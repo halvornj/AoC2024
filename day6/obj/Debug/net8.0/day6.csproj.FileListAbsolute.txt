@@ -1,0 +1,15 @@
+C:\projects\personal\AoC2024\day6\bin\Debug\net8.0\day6.exe
+C:\projects\personal\AoC2024\day6\bin\Debug\net8.0\day6.deps.json
+C:\projects\personal\AoC2024\day6\bin\Debug\net8.0\day6.runtimeconfig.json
+C:\projects\personal\AoC2024\day6\bin\Debug\net8.0\day6.dll
+C:\projects\personal\AoC2024\day6\bin\Debug\net8.0\day6.pdb
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.GeneratedMSBuildEditorConfig.editorconfig
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.AssemblyInfoInputs.cache
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.AssemblyInfo.cs
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.csproj.CoreCompileInputs.cache
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.sourcelink.json
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.dll
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\refint\day6.dll
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.pdb
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\day6.genruntimeconfig.cache
+C:\projects\personal\AoC2024\day6\obj\Debug\net8.0\ref\day6.dll

@@ -86,9 +86,8 @@
 
 (define/memoize (digits n)
   (inexact->exact (+ 1 (floor (/ (log n) (log 10))))))
-
 (define (|| x y)
-  (+ (* y (expt 10 (digits x))) x))
+  (+ (* x (expt 10 (digits y))) y))
 
 
 ;;moved these outside to memoize globally
@@ -131,9 +130,9 @@
     (define (try-inner inner-uint)
       (cond
         ((eq? inner-uint (- (expt 2 (- (length equation) 2)) 1)) ;; if we've reached the final permutation - 
-         (eq? (apply-procs (uint-and-input->procs procs || inner-uint (- (length equation) 2)) (cdr equation)) (car equation))) ;; check the answer, and return the match
-        ((eq? (apply-procs (uint-and-input->procs procs || inner-uint (- (length equation) 2)) (cdr equation)) (car equation)) #t) ;;otherwise, if the answer matches, return true
-        (else (try-inner (+ inner-uint 1)))))
+         (eq? (apply-procs (uint-and-input->procs procs || inner-uint) (cdr equation)) (car equation))) ;; check the answer, and return the match
+        ((eq? (apply-procs (uint-and-input->procs procs || inner-uint) (cdr equation)) (car equation)) #t) ;;otherwise, if the answer matches, return true
+        (else (try-combinations (+ uint 1)))))
       
     (cond
       ((eq? uint (- (expt 2 (- (length equation) 2)) 1)) ;; if we've reached the final permutation - 
@@ -155,11 +154,4 @@
 
 ;;;;
 (display "part2: \n")
-(display "start: ")
-(display (current-seconds))
-(display "\n")
-
-(part2)
-
-(display "\nend: ")
-(display (current-seconds))
+;; (part2)
