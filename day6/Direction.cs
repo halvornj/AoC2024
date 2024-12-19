@@ -8,9 +8,9 @@ namespace day6
 {
 	enum Direction
 	{
-		Up = -1,
-		Right = 1,
-		Down = 1,
-		Left = -1
+		Up,
+		Right,
+		Down,
+		Left
 	}
 }

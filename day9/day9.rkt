@@ -2,6 +2,19 @@
 (require srfi/42) ; Racket
 
 
+(define (eller lst)
+  (cond
+    ((null? lst) #f)
+    ((car lst) #t)
+    (else (eller (cdr lst)))))
+
+(define (og lst)
+  (cond
+    ((null? lst) #t)
+    ((not (car lst)) #f)
+    (else (og (cdr lst)))))
+
+
 (define (file->lines filename)
   (call-with-input-file filename
     (lambda (p)
@@ -24,51 +37,37 @@
       (else (diskmap-inner (cdr initial) (append expanded (expand-symbol (car initial) #f)) (+ i 1)))))
   (diskmap-inner inp '() 0))
 
+(define expanded (expanded-diskmap input))
 
-(define (eller lst)
-  (cond
-    ((null? lst) #f)
-    ((car lst) #t)
-    (else (eller (cdr lst)))))
-(define (og lst)
-  (cond
-    ((null? lst) #t)
-    ((not (car lst)) #f)
-    (else (og (cdr lst)))))
 
-(define (rearrange-map expanded-map)
 
-  (define (move-block map block)
+
+(define (move map)
+  (define (rest lst)
+    (if (not (car lst)) '() (cons (car lst) (rest (cdr lst)))))
+
+  (define (iter primary reverse)
     (cond
-      ((null? map) '())
-      ((not (car map)) (cons block (cdr map)))
-      (else (cons (car map) (move-block (cdr map) block)))))
-
+      ((not (car reverse)) (iter primary (cdr reverse)))
+      ((eq? (car primary) (car reverse)) (rest primary))
+      ((car primary) (cons (car primary) (iter (cdr primary) reverse)))
+      (else (cons (car reverse) (iter (cdr primary) (cdr reverse))))))
   
-  (define(move-last map)
-    (define (iter m prev)
-      (cond
-        ((og m) (append prev #f)) 
-        ((car m) (move-block (reverse m) (car m)))
-        (else (iter (cdr m) m))))
-    (define rmap (reverse map))
-    (define i (iter rmap rmap))
-    (reverse(cdr (reverse i))))
+
+ (iter map (reverse map)))
+
+(define moved (move expanded))
 
 
-  
-  (define (move-all map)
-    (if (og map) map (move-all (move-last map))))
-
-  (move-all expanded-map)
-  )
-
-(define (part1)
   (define (get-id-mul-index lst acc index)
     (if (null? lst)
         acc
         (get-id-mul-index (cdr lst) (+ acc (* (car lst) index)) (+ index 1))))
-  (get-id-mul-index (rearrange-map (expanded-diskmap input)) 0 0))
 
-(display "part 1: ")
-(part1)
+
+(display "start-time: ")
+(display (current-seconds))
+(display "\npart1: \n")
+(get-id-mul-index moved 0 0)
+(display "\n end-time: ")
+(display (current-seconds))
